@@ -2,15 +2,26 @@
 
 
 def canUnlockAll(boxes):
-    """
-    lockboxes function
-    """
-
-    n = len(boxes)
-    bx = boxes[0]
-    bloc1 = [False] + [True] * (n - 1)
-    for i in bx:
-        if ((i < n) and (bloc1[i] is True)):
-            bloc1[i] = False
-            bx.extend(boxes[i])
-    return not any(bloc1)
+    """lockboxes"""
+    if (boxes is None):
+        return (True)
+    if (type(boxes) is list):
+        my_list = {}
+        keys = []
+        my_list[0] = True
+        for i in range(1, len(boxes)):
+            my_list[i] = False
+        if (len(boxes) > 0):
+            keys.append(boxes[0])
+        for i in keys:
+            for j in i:
+                my_list[j] = True
+                i.remove(j)
+                if j < len(boxes):
+                    keys.append(boxes[j])
+        if False in my_list.values():
+            return (False)
+        else:
+            return (True)
+    else:
+        return (False)
