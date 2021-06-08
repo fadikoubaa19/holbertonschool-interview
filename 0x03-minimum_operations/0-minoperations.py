@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+
+
 def minOperations(n):
     '''n : int
        op : the executable operation
