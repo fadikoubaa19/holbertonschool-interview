@@ -1,14 +1,29 @@
 #!/usr/bin/python3
+'Lockboxes'
 
 
 def canUnlockAll(boxes):
-    """lockboxes"""
-    if boxes[0] == [] or not isinstance(boxes, list):
+    """method that determines if all the boxes can be opened
+    Arguments:
+        list of lists(boxes)
+    key number of keys
+    Returns:
+    return true if all boxes opened else it's false
+    """
+    if (len(boxes) < 1 or type(boxes) is not list):
         return False
 
-    opens = [0]
-    for index, box in enumerate(boxes):
-        for k in box:
-            if k not in opens and k in range(0, len(boxes)) and k != index:
-                opens.append(k)
-    return len(opens) == len(boxes)
+    open_box = [0]
+    i = 0
+    while i < len(boxes):
+        if i >= len(open_box):
+            return False
+        if boxes[open_box[i]] is not None:
+            for key in boxes[open_box[i]]:
+                if key not in open_box and key < len(boxes):
+                    open_box.append(key)
+        i += 1
+    if len(open_box) == len(boxes):
+        return True
+    else:
+        return False
