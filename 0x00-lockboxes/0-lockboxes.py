@@ -3,25 +3,12 @@
 
 def canUnlockAll(boxes):
     """lockboxes"""
-    if (boxes is None):
-        return (True)
-    if (type(boxes) is list):
-        my_list = {}
-        keys = []
-        my_list[0] = True
-        for i in range(1, len(boxes)):
-            my_list[i] = False
-        if (len(boxes) > 0):
-            keys.append(boxes[0])
-        for i in keys:
-            for j in i:
-                my_list[j] = True
-                i.remove(j)
-                if j < len(boxes):
-                    keys.append(boxes[j])
-        if False in my_list.values():
-            return (False)
-        else:
-            return (True)
-    else:
-        return (False)
+    if boxes[0] == [] or not isinstance(boxes, list):
+        return False
+
+    opens = [0]
+    for index, box in enumerate(boxes):
+        for k in box:
+            if k not in opens and k in range(0, len(boxes)) and k != index:
+                opens.append(k)
+    return len(opens) == len(boxes)
