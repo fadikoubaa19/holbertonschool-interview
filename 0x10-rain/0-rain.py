@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 """
+0-rain.py
 """
 
 
 def rain(walls):
-    """Calculates how much water will be retained after it rains.
+    """
+    Function rain to cal the water
     """
     if walls is None or walls == []:
         return 0
