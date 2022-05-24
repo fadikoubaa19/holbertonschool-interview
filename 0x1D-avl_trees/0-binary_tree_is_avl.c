@@ -14,7 +14,7 @@ int checker(const binary_tree_t *newn, int minimum, int maximum, int *height)
 
 	right = 0;
 	left = 0;
-	if (!new)
+	if (!newn)
 		return (1);
 	if (newn->n <= minimum || newn->n >= maximum)
 		return (0);
