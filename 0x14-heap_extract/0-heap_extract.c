@@ -1,115 +1,90 @@
 #include "binary_trees.h"
+
 /**
- * height - for holbertonschool
- * @tree: var
- * Return: var
- **/
-size_t height(const heap_t *tree)
+ * heap_size - get the size of heap
+ * @heap: pointer to root
+ * Return: the size.
+ */
+int heap_mal(const heap_t *heap)
 {
-	size_t left, right;
+	size_t left_side, right_side, calc;
 
-	if (!tree)
+	if (!heap)
 		return (0);
+	left_side = heap_mal(heap->left_side);
+	right_side = heap_mal(heap->right_side);
+	calc = left_side + right_side + 1;
 
-	if (!tree->left && !tree->right)
-		return (0);
-
-	left = height(tree->left) + 1;
-	right = height(tree->right) + 1;
-
-	if (left >= right)
-		return (left);
-	else		return (right);
+	return (calc);
 }
 
 /**
- * recursion - for holbertonschool
- * @tree: var
- * @node: var
- * @height: the height
- * @level: a var
- **/
-void recursion(heap_t *tree, heap_t **node, size_t height, size_t level)
+ * heap_search - for holbertonschool
+ * @heap: var.
+ */
+void heap_search(heap_t *heap)
 {
-	if (!tree)
-		return;
+	heap_t *node = heap, *child;
+	int temp;
 
-	if (height == level)
-		*node = tree;
-
-	level++;
-
-	if (tree->left)
-		recursion(tree->left, node, height, level);
-
-	if (tree->right)
-		recursion(tree->right, node, height, level);
-}
-
-/**
- * replace - for holb school
- * @tree: var
- * @node: var
- * @extracted_value: var
- * Return: return  the v alue of node
- **/
-int replace(heap_t **tree, heap_t **node, int extracted_value)
-{
-	heap_t *rns;
-	int value;
-
-	rns = *tree;
-
-	while (rns->left || rns->right)
+	while (1)
 	{
-		if (!rns->right || rns->left->n > rns->right->n)
-		{
-			value = rns->n;
-			rns->n = rns->left->n;
-			rns->left->n = value;
-			rns = rns->left;
-		}
-		else if (!rns->left || rns->left->n < rns->right->n)
-		{
-			value = rns->n;
-			rns->n = rns->right->n;
-			rns->right->n = value;
-			rns = rns->right;
-		}
+		if (!node->left_side)
+			break;
+		if (!node->right_side)
+			child = node->left_side;
+		else
+			child = node->left_side->n > node->right_side->n ?
+				node->left_side : node->right_side;
+		if (node->n > child->n)
+			break;
+		temp = node->n;
+		node->n = child->n;
+		child->n = temp;
+		node = child;
 	}
-	rns->n = (*node)->n;
-	if ((*node)->parent->right)
-		(*node)->parent->right = NULL;
+}
+
+/**
+ * heap_extract - extracts top node of max binary heap
+ * @heap: pointer to heap
+ * Return: root node
+ */
+int heap_extract(heap_t **heap)
+{
+	int n, size, bitwise;
+	heap_t *node, *root;
+
+	if (!heap || !*heap)
+		return (0);
+
+	root = *heap;
+	n = root->n;
+	size = heap_mal(root);
+
+	if (size == 1)
+	{
+		free(root);
+		*heap = NULL;
+		return (n);
+	}
+
+	for (bitwise = 1; bitwise <= size; bitwise <<= 1)
+		;
+	bitwise >>= 2;
+
+	for (node = root; bitwise > 0; bitwise >>= 1)
+		node = size & bitwise ? node->right : node->left;
+	root->n = node->n;
+
+	if (node->parent->left_side == node)
+		node->parent->left_side = NULL;
 	else
-		(*node)->parent->left = NULL;
-	free(*node);
-	return (extracted_value);
-}
+		node->parent->right_side = NULL;
 
-/**
- * heap_extract - for holbertonschool
- * @root: var
- * Return: return the root
- **/
-int heap_extract(heap_t **root)
-{
-	int extracted_value, result;
-	size_t level, altura;
-	heap_t *rns, *node = NULL;
+	free(node);
+	heap_search(root);
+	*heap = root;
 
-	if (!root || !*root)
-		return (0);
-	rns = *root;
-	extracted_value = rns->n;
-	level = 0;
-	if (rns->left == NULL && rns->right == NULL)
-	{
-		*root = NULL;
-		free(rns);
-		return (extracted_value);
-	}
-	altura = height(rns);
-	recursion(rns, &node, altura, level);
-	result = replace(&rns, &node, extracted_value);
-	return (result);
+	return (n);
 }
