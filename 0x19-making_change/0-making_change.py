@@ -8,7 +8,7 @@ def makeChange(coins, total):
     cal = 0
     coins = sorted(coins, reverse=True)
     for ele in coins:
-        if total or ele != 0:
+        if total // ele != 0:
             cal += total // ele
             total = total % ele
     if total == 0:
